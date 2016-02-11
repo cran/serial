@@ -1,0 +1,11 @@
+07201c671839c587e35a22f58bcf393c *DESCRIPTION
+3415ee1f1112f344ed02a14e6c56bffb *NAMESPACE
+a5ab81a036b347937ec29d5453003f2b *R/init.R
+c27fbe2b4240dc17354579b9647e1512 *R/pkgname.R
+26b7d2557f19dce3e0f8578e9fe0cba7 *R/serial.R
+e02f5f0c6da0b059984d58131cf27a07 *man/close.serialConnection.Rd
+cbe14a56ad51280adcd2266d1ca2bc15 *man/open.serialConnection.Rd
+7a30febad7944334a2921797599bcff3 *man/read.serialConnection.Rd
+5ec75919cd98573a9d7ed40735775c40 *man/serial.Rd
+aca2be829b226d6207c7499a47766cf1 *man/serialConnection.Rd
+47cf64b0e16904947822060de6937f32 *man/write.serialConnection.Rd
