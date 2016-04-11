@@ -11,7 +11,7 @@ serialConnection(name, port = "com1", mode = "115200,n,8,1",
 \arguments{
 \item{name}{optional name for the connection}
 
-\item{port}{comport name, should also work in Linux; also virtual com's are 
+\item{port}{comport name; also virtual com's are 
 supported; maybe USB schould work too}
 
 \item{mode}{communication mode "\code{<BAUD>, <PARITY>, <DATABITS>, <STOPBITS>}"
@@ -47,6 +47,12 @@ character. This could be 'lf', 'cr', 'crlf', 'binary'}
 An object of the class "\code{serialConnection}" is returned
 }
 \description{
-Sets up the interface parameters.
+This is the constructor of the serial interface connection.
+}
+\details{
+Linux and Windows behave a little bit different, when utilizing serial com ports. Still, 
+by providing the name (like "COM1" or "ttyS1") and the appropriate settings, the serial 
+interface can be used. Even virtual com ports, like the FTDI usb uart chips will work,
+as long they map to a standard serial interface in the system.
 }
 

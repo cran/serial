@@ -1,16 +1,18 @@
 #' A serial communication interface for R.
 #' 
-#' This R package provides the functionality to use the serial communication ports
-#' "COM" to use RS232/RS422/RS485 functionality of the corresponding hardware.
-#' Also virtual COM-ports via USB do work, as long as they are mapped to COM[n] (win)
-#' or tty[n] (Linux) in the operating system.
-#' 
 #' @description
+#' This R package provides the functionality to use the serial communication ports
+#' "COM" or "tty" to use the RS232/RS422/RS485 functionality of the corresponding 
+#' hardware. Also virtual COM-ports via USB do work, as long as they are mapped
+#' to COM[n] (win) or tty[n] (Linux) in the operating system.
+#' 
 #' \describe{
-#'  \item{\code{open}}{opens a serial connection}
-#'  \item{\code{close}}{closes the serial connection}
-#'  \item{\code{read.serialConnection}}{byte wise read from the interface as long as the buffer is empty}
-#'  \item{\code{write.serialConnection}}{writes a string to the serial interface}
+#'  \item{\code{open(con)}}{opens a serial connection}
+#'  \item{\code{close(con)}}{closes the serial connection}
+#'  \item{\code{read.serialConnection(con)}}{byte wise read from the interface as long as the buffer is empty}
+#'  \item{\code{write.serialConnection(con,dat)}}{writes a string to the serial interface}
+#'  \item{\code{isOpen(con)}}{test a connection, whether it is open or not}
+#'  \item{\code{listPorts()}}{list all available ports on the system}
 #' }
 #' 
 #' @examples
@@ -23,7 +25,7 @@
 #' #
 #' # first: install the virtual null-modem connection like
 #' #        com0com (win) or tty0tty (linux)
-#' #        Hint: Some unix insist on port names like 'ttxS[n]'.
+#' #        Hint: Some unix insist on port names like 'ttyS[n]'.
 #' # 
 #' # second: setup a terminal program (like HTerm or gtkterm) and listen to 
 #' #         com-port 'CNCB0' (or what ever you have installed)

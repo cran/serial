@@ -13,11 +13,14 @@
 #' @export
 write.serialConnection<-function(con,dat)
 {
+  if(!isOpen(con))
+    stop(simpleError(paste(con$port,"is not open!")))
   nl <- "-nonewline "
   if(con$newline) nl <- ""
   
-  try( .Tcl( paste("puts ",nl,"$sdev_",con$port, " \"", dat,"\"", sep="")) )
-  
+  tryCatch( .Tcl( paste("puts ",nl,"$sdev_",con$port, " \"", dat,"\"", sep=""))
+            ,error = function(e) stop(simpleError(e$message))
+  )
   #   ..," \"", dat,"\"",.. -> quotes dat in TCL String
   #   with out quoting space and control characters this will fail 
   
@@ -27,7 +30,7 @@ write.serialConnection<-function(con,dat)
 #' Reads from the serial interface.
 #' 
 #' This function reads from the serial interface as long as the buffer is not
-#' empty. The read takes place perbyte.
+#' empty. The read takes place per byte.
 #' 
 #' 
 #' @param con serial connection
@@ -42,12 +45,17 @@ write.serialConnection<-function(con,dat)
 #' @export
 read.serialConnection<-function(con)
 {
-  res<-""
+  if(!isOpen(con))
+    stop(simpleError(paste(con$port,"is not open!")))
+  
+  res <- ""
   while(1)
   {
-    tmp <- try(tclvalue( .Tcl( paste("gets $sdev_",con$port, sep=""))))
-    if(tmp=="") break
-    res<-paste(res,tmp,sep="")
+    tryCatch( tmp <- tclvalue( .Tcl( paste("gets $sdev_",con$port, sep="")))
+              ,error = function(e) stop(simpleError(e$message))
+    )
+    if(tmp == "") break
+    res<-paste(res, tmp, sep = "")
   }
   return(res)
 }

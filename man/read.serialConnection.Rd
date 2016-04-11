@@ -14,7 +14,7 @@ The result is a string, which can be converted to raw as necessary
 }
 \description{
 This function reads from the serial interface as long as the buffer is not
-empty. The read takes place perbyte.
+empty. The read takes place per byte.
 }
 \examples{
  # See the top package documentation

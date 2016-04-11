@@ -1,7 +1,15 @@
 #' Sets up the interface parameters.
 #' 
+#' This is the constructor of the serial interface connection.
+#' 
+#' Linux and Windows behave a little bit different, when utilizing serial com ports. Still, 
+#' by providing the name (like "COM1" or "ttyS1") and the appropriate settings, the serial 
+#' interface can be used. Even virtual com ports, like the FTDI usb uart chips will work,
+#' as long they map to a standard serial interface in the system.
+#' 
+#' 
 #' @param name  optional name for the connection
-#' @param port  comport name, should also work in Linux; also virtual com's are 
+#' @param port  comport name; also virtual com's are 
 #'              supported; maybe USB schould work too
 #' @param mode  communication mode "\code{<BAUD>, <PARITY>, <DATABITS>, <STOPBITS>}"
 #' \describe{
@@ -58,28 +66,33 @@ serialConnection<-function(name, port="com1", mode="115200,n,8,1", buffering="no
 #' @export
 open.serialConnection<-function(con, ...)
 {
+  if(isOpen(con))
+  {
+    warning(paste(con$port,"is already open"))
+    invisible(return("FAIL!"))
+  }
   ## set platform depended path
   os_path <- switch(.Platform$OS.type
                     ,windows = "//./"
-                    ,unix = "/dev/")
+                    ,unix = "/dev/"
+                    )
   ## set connection and variables
-  try( .Tcl( paste("set sdev_",con$port," [open ",os_path,con$port," r+]",sep="")) )
-  ## '//./' defines the windows path for the com ports
-  ## only in this way it is possible to use virtual ports as well
-  ## the unix comports are located in '/dev/'
-  
+  tryCatch( .Tcl( paste("set sdev_",con$port," [open ",os_path,con$port," r+]",sep=""))
+            ,error = function(e) stop(simpleError(e$message))
+  )
   ## setup configuration
   eof <- paste(" -eofchar ", con$eof,sep="")
   if(con$eof=="") eof=""
-  try( .Tcl( paste("fconfigure $sdev_",con$port
+  .Tcl( paste("fconfigure $sdev_",con$port
               ," -mode ", con$mode
               ," -buffering ",con$buffering
               ," -blocking 0"
               ,eof
               ," -translation ",con$translation
               ," -handshake ",con$handshake
-              ,sep=""))
-  )
+              ,sep=""
+              )
+        )
   invisible("DONE")
   ## it seems that -eofchar doesn't work
   ## "buffering none" is recommended, other setings doesn't work to send 
@@ -99,6 +112,57 @@ open.serialConnection<-function(con, ...)
 #' @export
 close.serialConnection<-function(con, ...)
 {
-  try(.Tcl(paste("close $sdev_",con$port,sep="")))
+  if(isOpen(con))
+  {
+    tryCatch( .Tcl( paste( "close $sdev_", con$port, sep = "" ) )
+              ,error = function(e) stop(simpleError(e$message))
+    )
+    .Tcl( paste( "unset sdev_", con$port, sep = "" ) )
+  }
   invisible("DONE")
+}
+
+#' Generic function for isOpen
+#' 
+#' @param con connection Object
+#' @param ... not used
+#' 
+#' @export
+isOpen <- function(con, ...) UseMethod("isOpen")
+
+#' Default function from base-package
+#' 
+#' @param con connection object
+#' @param rw defines the mode of operation
+#' 
+#' @seealso \code{\link[base]{isOpen}}
+isOpen.default <- function(con, rw="")
+{
+  base::isOpen(con,rw)
+}
+#' Tests whether the connection is open or not
+#' 
+#' @param con connection of the class \code{serialConnection}
+#' @param ... not used
+#' 
+#' @return returns \code{{F, T}} for 'not open' and 'is open'
+#' @export
+isOpen.serialConnection <-function(con,...)
+{
+  e <- 0 # assume that the connection is closed
+  
+  # only if the corresponding variable exists, there is a chance to test
+  if(tclvalue( .Tcl( paste("info exists sdev_",con$port, sep=""))) == 1) 
+  {
+    # get the names of all open channels (connections)
+    chan_names <- tclvalue( .Tcl("file channels"))
+    
+    # get the tcl internal name of the connection
+    con_name <- tclvalue(paste("sdev_",con$port, sep="")) 
+    
+    # test if con_name is in the list of channels
+    e <- con_name %in% strsplit(chan_names," ")[[1]]
+  }
+  
+  return(ifelse(e == 1,T,F))
 }
