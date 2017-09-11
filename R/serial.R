@@ -2,29 +2,29 @@
 #' 
 #' @param con serial Connection
 #' @param dat data string to write on the serial interface. At the moment this 
-#'            must be a string \code{"..."}. See examle section in \code{\link{serial}}.
+#'            must be a string \code{'...'}. See examle section in \code{\link{serial}}.
 #' 
 #' @usage write.serialConnection(con,dat)
 #' @seealso \code{\link{serial}}
 #' @examples
 #'  # See the top package documentation
 #'  
-#'  \dontrun{write.serialConnection(con, "Hello World!")}
+#'  \dontrun{write.serialConnection(con, 'Hello World!')}
 #' @export
 write.serialConnection<-function(con,dat)
 {
   if(!isOpen(con))
-    stop(simpleError(paste(con$port,"is not open!")))
-  nl <- "-nonewline "
-  if(con$newline) nl <- ""
+    stop(simpleError(paste(con$port,'is not open!')))
+  nl <- '-nonewline '
+  if(con$newline) nl <- ''
   
-  tryCatch( .Tcl( paste("puts ",nl,"$sdev_",con$port, " \"", dat,"\"", sep=""))
+  tryCatch( .Tcl( paste('puts ',nl,'${sdev_',con$port, '} \"', dat,'\"', sep=''))
             ,error = function(e) stop(simpleError(e$message))
   )
-  #   ..," \"", dat,"\"",.. -> quotes dat in TCL String
+  #   ..,' \"', dat,'\"',.. -> quotes dat in TCL String
   #   with out quoting space and control characters this will fail 
   
-  invisible("DONE")
+  invisible('DONE')
 }
 
 #' Reads from the serial interface.
@@ -43,19 +43,19 @@ write.serialConnection<-function(con,dat)
 #' @examples
 #'  # See the top package documentation
 #' @export
-read.serialConnection<-function(con)
+read.serialConnection <- function(con)
 {
   if(!isOpen(con))
-    stop(simpleError(paste(con$port,"is not open!")))
+    stop(simpleError(paste(con$port,'is not open!')))
   
-  res <- ""
+  res <- ''
   while(1)
   {
-    tryCatch( tmp <- tclvalue( .Tcl( paste("gets $sdev_",con$port, sep="")))
+    tryCatch( tmp <- tclvalue( .Tcl( paste('gets ${sdev_',con$port,'}', sep='')))
               ,error = function(e) stop(simpleError(e$message))
     )
-    if(tmp == "") break
-    res<-paste(res, tmp, sep = "")
+    if(tmp == '') break
+    res <- paste(res, tmp, sep = '')
   }
   return(res)
 }

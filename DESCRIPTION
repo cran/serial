@@ -1,8 +1,8 @@
 Package: serial
 Type: Package
 Title: The Serial Interface Package
-Version: 1.2
-Date: 2016-04-11
+Version: 1.3
+Date: 2017-09-11
 Author: Martin Seilmayer
 Maintainer: Martin Seilmayer <m.seilmayer@hzdr.de>
 Description: Provides functionality for the use of the internal hardware for
@@ -11,7 +11,7 @@ Description: Provides functionality for the use of the internal hardware for
 Depends: R (>= 2.15.0)
 License: GPL-2
 RoxygenNote: 5.0.1
-Packaged: 2016-04-11 07:52:43 UTC; ms5760
 NeedsCompilation: no
+Packaged: 2017-09-11 08:50:36 UTC; ms5760
 Repository: CRAN
-Date/Publication: 2016-04-11 14:45:28
+Date/Publication: 2017-09-11 08:59:08 UTC

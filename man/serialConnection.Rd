@@ -6,7 +6,7 @@
 \usage{
 serialConnection(name, port = "com1", mode = "115200,n,8,1",
   buffering = "none", newline = 0, eof = "", translation = "lf",
-  handshake = "none")
+  handshake = "none", buffersize = 4096)
 }
 \arguments{
 \item{name}{optional name for the connection}
@@ -14,15 +14,15 @@ serialConnection(name, port = "com1", mode = "115200,n,8,1",
 \item{port}{comport name; also virtual com's are 
 supported; maybe USB schould work too}
 
-\item{mode}{communication mode "\code{<BAUD>, <PARITY>, <DATABITS>, <STOPBITS>}"
+\item{mode}{communication mode '\code{<BAUD>, <PARITY>, <DATABITS>, <STOPBITS>}'
 \describe{
    \item{\code{BAUD}}{sets the baud rate (bits per second)}
-   \item{\code{PARITY}}{\emph{n, o, e, m, s} stands for "none", "odd", "even", "mark" and "space"}
+   \item{\code{PARITY}}{\emph{n, o, e, m, s} stands for 'none', 'odd', 'even', 'mark' and 'space'}
    \item{\code{DATABITS}}{integer number of data bits. The value can range from 5 to 8}
-   \item{\code{STOPBITS}}{integer number of stop bits. This can be "1" or "2"}
+   \item{\code{STOPBITS}}{integer number of stop bits. This can be '1' or '2'}
        }}
 
-\item{buffering}{"\code{none}", for RS232 serial interface, other modes don't work in this case}
+\item{buffering}{'\code{none}', for RS232 serial interface, other modes don't work in this case}
 
 \item{newline}{\code{<BOOL>}, whether a new transmission starts with a newline or not.
 \describe{
@@ -38,21 +38,29 @@ character. This could be 'lf', 'cr', 'crlf', 'binary'}
 
 \item{handshake}{determines the type of handshaking the communication
 \describe{
-  \item{"\code{none}"}{no handshake is done}
-  \item{"\code{rtscts}"}{hardware handshake is enabled}
-  \item{"\code{xonxoff}"}{software handshake via extra characters is enabled}
+  \item{'\code{none}'}{no handshake is done}
+  \item{'\code{rtscts}'}{hardware handshake is enabled}
+  \item{'\code{xonxoff}'}{software handshake via extra characters is enabled}
   }}
+
+\item{buffersize}{defines the system buffersize. The default value is 4096 bytes (4kB
+).}
 }
 \value{
-An object of the class "\code{serialConnection}" is returned
+An object of the class '\code{serialConnection}' is returned
 }
 \description{
 This is the constructor of the serial interface connection.
 }
 \details{
 Linux and Windows behave a little bit different, when utilizing serial com ports. Still, 
-by providing the name (like "COM1" or "ttyS1") and the appropriate settings, the serial 
+by providing the name (like 'COM1' or 'ttyS1') and the appropriate settings, the serial 
 interface can be used. Even virtual com ports, like the FTDI usb uart chips will work,
 as long they map to a standard serial interface in the system.
+
+Since the \code{serial} package relies on R's built in Tcl/Tk engine the configuration
+of the serial port takes place in the Tcl framework. This becomes important 
+when different buffer sizes are set. For Windows the Tcl "-sysbuffer" parameter 
+is invoked, whereas on unix-like systems "-buffersize" does the job.
 }
 
