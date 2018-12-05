@@ -10,11 +10,22 @@ read.serialConnection(con)
 \item{con}{serial connection}
 }
 \value{
-The result is a string, which can be converted to raw as necessary
+In normal mode the result is a string. In binary mode raw values will 
+be returned
 }
 \description{
 This function reads from the serial interface as long as the buffer is not
-empty. The read takes place per byte.
+empty. The read takes place per line in normal operation mode. Here end-of-line
+characters (\\n;\\r) are clipped according to the settings (\code{translation}).
+}
+\details{
+In binary (hex-) mode the read takes place per byte. The result is a raw 
+vector of hexadecimal numbers. To get numeric values \code{as.numeric} 
+function must be invoked.
+Mind: Values form 0x01 -- 0x31 might be displayed as escaped characters like
+ "\\001" if they are interpreted as string.
+If the end-of-file character specified by \code{eof} is received the reading 
+stops.
 }
 \examples{
  # See the top package documentation

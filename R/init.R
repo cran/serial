@@ -2,15 +2,40 @@
 #' 
 #' This is the constructor of the serial interface connection.
 #' 
-#' Linux and Windows behave a little bit different, when utilizing serial com ports. Still, 
-#' by providing the name (like 'COM1' or 'ttyS1') and the appropriate settings, the serial 
-#' interface can be used. Even virtual com ports, like the FTDI usb uart chips will work,
-#' as long they map to a standard serial interface in the system.
+#' Linux and Windows behave a little bit different, when utilizing serial com 
+#' ports. Still, by providing the name (like 'COM1' or 'ttyS1') and the 
+#' appropriate settings, the serial interface can be used. Even virtual com 
+#' ports, like the FTDI usb uart chips will work, as long they map to a standard
+#' serial interface in the system.
 #' 
-#' Since the \code{serial} package relies on R's built in Tcl/Tk engine the configuration
-#' of the serial port takes place in the Tcl framework. This becomes important 
-#' when different buffer sizes are set. For Windows the Tcl "-sysbuffer" parameter 
-#' is invoked, whereas on unix-like systems "-buffersize" does the job.
+#' Since the \code{serial} package relies on R's built in Tcl/Tk engine the 
+#' configuration of the serial port takes place in the Tcl framework. This 
+#' becomes important when different buffer sizes are set. For Windows the Tcl 
+#' "-sysbuffer" parameter is invoked, whereas on unix-like systems "-buffersize" 
+#' does the job.
+#' 
+#' @section Binary Data: 
+#' 
+#' Reading binary data is possible by setting \code{transaltion = 'binary'}. Pay 
+#' attention that input and output are strings with a number range of 0...0xFF
+#' which might require certain conversations e. g. \code{charToRaw()} or
+#' \code{rawToChar()} functions. If \code{eof}-character is defined, this symbol
+#' terminates the input data stream. Every byte in the buffer after that
+#' symbol is deleted/ignored. The next transmission is valid again up to that symbol.
+#' If the connection is closed \code{eof} is send to terminate the output data
+#' stream.
+#' 
+#' @section ASCII Data:
+#' 
+#' In non binary mode, ASCII-communication is assumed. This means, that each
+#' string, which is send or received, carries valid 8bit ASCII characters 
+#' (0x01 -- 0xFF). Some of these characters appear as escaped sequences, if they
+#' are not printable.
+#' A string is terminated by the end-of-line character (e. g. \\n). The 
+#' transmission ends and so becomes valid if a symbol is detected according to
+#' the \code{translation} setting. Sending terminated strings invokes the
+#' substitution of the end-of-line character according to the \code{translation}
+#' setting.
 #' 
 #' 
 #' @param name  optional name for the connection
@@ -24,7 +49,7 @@
 #'    \item{\code{STOPBITS}}{integer number of stop bits. This can be '1' or '2'}
 #'        }       
 #'              
-#' @param buffering '\code{none}', for RS232 serial interface, other modes don't work in this case
+#' @param buffering '\code{none}', best for RS232 serial interface. Connection buffer is flushed (send) when ever a write operation took place. '\code{line}', buffer is send after newline character (\\n or 0x0A) is recognized. '\code{full}' write operations will be bufferd until a \code{flush(con)} is invoked.
 #' @param newline \code{<BOOL>}, whether a new transmission starts with a newline or not.
 #'                \describe{
 #'                  \item{\code{TRUE} or 1}{send newline-char according to \code{<translation>} befor transmitting}
@@ -38,14 +63,18 @@
 #'                    }
 #' 
 #' @param eof \code{<CHAR>}, termination char of the datastream. It only makes sense
-#'        if \code{<translation>} is 'binary' and the stream is a file
-#' @param translation  each transmitted string is terminated by the transmission
-#'       character. This could be 'lf', 'cr', 'crlf', 'binary'
-#' @param buffersize defines the system buffersize. The default value is 4096 bytes (4kB
-#'                   ).
+#'        if \code{<translation>} is 'binary' and the stream is a file. Must be in the
+#'        range of 0x01 -- 0x7f. When the conection is closed \code{eof} is send as 
+#'        last and final character
+#' @param translation  Determines the end-of-line (eol) character and mode of 
+#'                     operation. This could be 'lf', 'cr', 'crlf', 'binary',
+#'                     'auto' (default). A transmission is complete if eol 
+#'                     symbol is received in non binary mode.
+#' @param buffersize defines the system buffersize. The default value is 4096 
+#'                   bytes (4kB).
 #' @return An object of the class '\code{serialConnection}' is returned
 #' @export
-serialConnection<-function(name, port='com1', mode='115200,n,8,1', buffering='none', newline=0,eof='',translation='lf',handshake='none',buffersize = 4096)
+serialConnection<-function(name, port='com1', mode='115200,n,8,1', buffering='none', newline=0,eof='',translation='auto',handshake='none',buffersize = 4096)
 {
   obj<-list()
   obj$name <- name
@@ -76,8 +105,8 @@ open.serialConnection<-function(con, ...)
 {
   if(isOpen(con))
   {
-    warning(paste(con$port,'is already open'))
-    invisible(return('FAIL!'))
+    warning(paste(con$port,'is already open and will be reconfigured!'))
+    invisible(return('Reconfigure!'))
   }
   ## set platform depended path
   os_path <- switch(.Platform$OS.type
@@ -90,26 +119,32 @@ open.serialConnection<-function(con, ...)
   )
   buffer_string <- paste(buffer_string,con$buffersize)
   
-  ## set connection and variables
-  tryCatch( .Tcl( paste('set ::sdev_',con$port,' [open {',os_path,con$port,'} r+]',sep=''))
-            ,error = function(e) stop(simpleError(e$message))
-  )
-  ## setup configuration
-  eof <- paste(' -eofchar ', con$eof,sep='')
-  if(con$eof=='') eof <- ''
+  ## open connection and variables
+  if(!isOpen(con))
+  {
+    tryCatch( .Tcl( paste('set ::sdev_',con$port
+                          ,' [open {',os_path,con$port,'} r+]'
+                          ,sep='')
+                    )
+              ,error = function(e) stop(simpleError(e$message))
+    )
+  }
+  ## setup configuration, or reconfigure
+  eof <- paste(" -eofchar \\x", charToRaw(con$eof),sep='')
+  if(con$eof == '') eof <- ''
+  
   .Tcl( paste('fconfigure ${sdev_',con$port,'}'
               ,' -mode ', con$mode
               ,' -buffering ',con$buffering
               ,' -blocking 0'
-              ,eof
               ,' -translation ',con$translation
               ,' -handshake ',con$handshake
               ,buffer_string
+              ,eof
               ,sep=''
               )
         )
   invisible('DONE')
-  ## it seems that -eofchar doesn't work
   ## 'buffering none' is recommended, other setings doesn't work to send 
 }
 
@@ -129,7 +164,10 @@ close.serialConnection<-function(con, ...)
 {
   if(isOpen(con))
   {
-    tryCatch( .Tcl( paste( 'close ${sdev_', con$port,'}', sep = '' ) )
+    tryCatch({
+              .Tcl( paste( 'flush ${sdev_', con$port,'}', sep = '' ) )
+              .Tcl( paste( 'close ${sdev_', con$port,'}', sep = '' ) )
+             } 
               ,error = function(e) stop(simpleError(e$message))
     )
     .Tcl( paste( 'unset sdev_', con$port, sep = '' ) )
@@ -155,14 +193,17 @@ isOpen.default <- function(con, rw='')
 {
   base::isOpen(con,rw)
 }
+
 #' Tests whether the connection is open or not
 #' 
 #' @param con connection of the class \code{serialConnection}
 #' @param ... not used
 #' 
+#' @method isOpen serialConnection
+#' 
 #' @return returns \code{{F, T}} for 'not open' and 'is open'
 #' @export
-isOpen.serialConnection <-function(con,...)
+isOpen.serialConnection <- function(con,...)
 {
   e <- 0 # assume that the connection is closed
   

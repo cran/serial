@@ -9,11 +9,23 @@ write.serialConnection(con,dat)
 \arguments{
 \item{con}{serial Connection}
 
-\item{dat}{data string to write on the serial interface. At the moment this 
-must be a string \code{'...'}. See examle section in \code{\link{serial}}.}
+\item{dat}{data string to write on the serial interface. This must be a string
+\code{'...'} in case of ascii communication. In case of binary 
+communication also numeric vectors are allowed. See examle section
+in \code{\link{serial}}.}
 }
 \description{
-Wirtes data to serial interface.
+Writes to a serial connection in ascii or binary mode.
+}
+\details{
+In normal operation mode (non-binary ascii mode) \code{write.serialConnection} 
+respects the translation and adds the end-of-line characters (\\n;\\r) according 
+to the settings. Any input is converted to character. As \code{c(1,2,3)} becomes
+\code{'123'} and so on.
+
+In binary mode \emph{no} end-of-line characters are added. The input argument
+must be of type \code{raw} or \code{string}. If \code{dat} is numeric 
+(vector) it is converted to \code{raw}.
 }
 \examples{
  # See the top package documentation

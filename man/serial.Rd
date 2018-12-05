@@ -14,8 +14,10 @@ to COM[n] (win) or tty[n] (Linux) in the operating system.
 \describe{
  \item{\code{open(con)}}{opens a serial connection}
  \item{\code{close(con)}}{closes the serial connection}
- \item{\code{read.serialConnection(con)}}{byte wise read from the interface as long as the buffer is empty}
- \item{\code{write.serialConnection(con,dat)}}{writes a string to the serial interface}
+ \item{\code{flush(con)}}{flushes the serial connection}
+ \item{\code{read.serialConnection(con)}}{read from the interface as long as 
+ the buffer is not empty}
+ \item{\code{write.serialConnection(con,dat)}}{writes a data (character or binary) to the serial interface}
  \item{\code{isOpen(con)}}{test a connection, whether it is open or not}
  \item{\code{listPorts()}}{list all available ports on the system}
 }
@@ -57,6 +59,36 @@ read.serialConnection(con)
 
 # close the connection
 close(con)
+
+
+
+# Reading and writing binary (hexadecimal) data
+# remember: Everything is a string, so you might need data conversation
+
+con <- serialConnection(name = "testcon",port = "CNCA0"
+                       ,mode = "115200,n,8,1"
+                       ,translation = "binary" # switches to binary data
+                       )
+
+# let's open the serial interface
+
+open(con)
+
+# write some stuff
+write.serialConnection(con, rawToChar(as.raw(15)) ) # 0x0F
+write.serialConnection(con, c(15,20) ) # 0x0F, 0x14
+write.serialConnection(con, c(0x6F,0x6C) )
+
+# read, in case something came in
+# the output is always a character vector
+a <- read.serialConnection(con)
+
+# convert the character vector to hexadecimal (raw) values
+print(a)
+
+# close the connection
+close(con)
+
 }
 }
 \concept{
@@ -67,5 +99,7 @@ RS485 serial
 RS422 serial
 
 USB serial
+
+binary communication
 }
 
