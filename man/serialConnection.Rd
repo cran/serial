@@ -24,7 +24,7 @@ supported; maybe USB schould work too}
 
 \item{buffering}{'\code{none}', best for RS232 serial interface. Connection buffer is flushed (send) when ever a write operation took place. '\code{line}', buffer is send after newline character (\\n or 0x0A) is recognized. '\code{full}' write operations will be bufferd until a \code{flush(con)} is invoked.}
 
-\item{newline}{\code{<BOOL>}, whether a new transmission starts with a newline or not.
+\item{newline}{\code{<BOOL>}, whether a transmission ends with a newline or not.
 \describe{
   \item{\code{TRUE} or 1}{send newline-char according to \code{<translation>} befor transmitting}
   \item{\code{FALSE} or 0}{no newline}

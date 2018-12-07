@@ -15,6 +15,7 @@ to COM[n] (win) or tty[n] (Linux) in the operating system.
  \item{\code{open(con)}}{opens a serial connection}
  \item{\code{close(con)}}{closes the serial connection}
  \item{\code{flush(con)}}{flushes the serial connection}
+ \item{\code{nBytesInQueue(con)}}{get the length of pending input an output queue}
  \item{\code{read.serialConnection(con)}}{read from the interface as long as 
  the buffer is not empty}
  \item{\code{write.serialConnection(con,dat)}}{writes a data (character or binary) to the serial interface}

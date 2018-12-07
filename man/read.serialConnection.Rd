@@ -4,10 +4,13 @@
 \alias{read.serialConnection}
 \title{Reads from the serial interface.}
 \usage{
-read.serialConnection(con)
+read.serialConnection(con,n = 0)
 }
 \arguments{
 \item{con}{serial connection}
+
+\item{n}{number of bytes to read. Only in binary mode. 
+\code{n=0} (default) reads the whole buffer at once.}
 }
 \value{
 In normal mode the result is a string. In binary mode raw values will 
@@ -25,7 +28,11 @@ function must be invoked.
 Mind: Values form 0x01 -- 0x31 might be displayed as escaped characters like
  "\\001" if they are interpreted as string.
 If the end-of-file character specified by \code{eof} is received the reading 
-stops.
+stops. A \code{close(con)} -- \code{open(con)} combination must be done to 
+reopen the connection.
+If \code{n>0} <n> bytes will be read. In case of less than \code{n} bytes 
+available the function returns the buffer without waiting for all \code{n} 
+characters.
 }
 \examples{
  # See the top package documentation

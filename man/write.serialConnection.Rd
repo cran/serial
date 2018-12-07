@@ -14,6 +14,9 @@ write.serialConnection(con,dat)
 communication also numeric vectors are allowed. See examle section
 in \code{\link{serial}}.}
 }
+\value{
+The status of success 'DONE' or 'Nothing to do' is returned.
+}
 \description{
 Writes to a serial connection in ascii or binary mode.
 }
