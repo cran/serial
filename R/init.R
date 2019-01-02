@@ -16,14 +16,15 @@
 #' 
 #' @section Binary Data: 
 #' 
-#' Reading binary data is possible by setting \code{transaltion = 'binary'}. Pay 
-#' attention that input and output are strings with a number range of 0...0xFF
-#' which might require certain conversations e. g. \code{charToRaw()} or
+#' Handling binary data is possible by setting \code{transaltion = 'binary'}. Pay 
+#' attention that input and output vectors are characters with a number range of
+#' 0...0xFF which might require certain conversations e. g. \code{charToRaw()} or
 #' \code{rawToChar()} functions. If \code{eof}-character is defined, this symbol
 #' terminates the input data stream. Every byte in the buffer after that
 #' symbol is deleted/ignored. The next transmission is valid again up to that symbol.
 #' If the connection is closed \code{eof} is send to terminate the output data
-#' stream.
+#' stream. Remind, the \code{newline} option works here too. It adds a line feed
+#' or \code{0x0A} - byte to the end of each output respectively.
 #' 
 #' @section ASCII Data:
 #' 
@@ -62,14 +63,16 @@
 #'                    \item{'\code{xonxoff}'}{software handshake via extra characters is enabled}
 #'                    }
 #' 
-#' @param eof \code{<CHAR>}, termination char of the datastream. It only makes sense
-#'        if \code{<translation>} is 'binary' and the stream is a file. Must be in the
-#'        range of 0x01 -- 0x7f. When the conection is closed \code{eof} is send as 
-#'        last and final character
+#' @param eof \code{<CHAR>}, termination char of the datastream (end-of-file). It
+#'        only makes sense if \code{<translation>} is 'binary' and the stream is
+#'        a file. Must be in the range of 0x01 -- 0x7f. When the conection is closed
+#'        \code{eof} is send as the last and final character.
+#'        
 #' @param translation  Determines the end-of-line (eol) character and mode of 
 #'                     operation. This could be 'lf', 'cr', 'crlf', 'binary',
 #'                     'auto' (default). A transmission is complete if eol 
 #'                     symbol is received in non binary mode.
+#'                     
 #' @param buffersize defines the system buffersize. The default value is 4096 
 #'                   bytes (4kB).
 #' @return An object of the class '\code{serialConnection}' is returned
@@ -80,11 +83,11 @@ serialConnection<-function(name, port='com1', mode='115200,n,8,1', buffering='no
   obj$name <- name
   obj$port <- port
   obj$mode <- mode
-  obj$buffering <- buffering
+  obj$buffering <- tolower(buffering)
   obj$newline <- newline
   obj$eof <- eof
-  obj$translation <- translation
-  obj$handshake <- handshake
+  obj$translation <- tolower(translation)
+  obj$handshake <- tolower(handshake)
   obj$buffersize <- buffersize
   class(obj) <- 'serialConnection'
   return(obj)
@@ -145,7 +148,7 @@ open.serialConnection<-function(con, ...)
               )
         )
   invisible('DONE')
-  ## 'buffering none' is recommended, other setings doesn't work to send 
+  ## 'buffering none' is recommended
 }
 
 #' Function to close an serial interface.

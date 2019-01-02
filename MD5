@@ -1,9 +1,9 @@
-4c6d44772769399a809caa0c947721ff *DESCRIPTION
+40b952987ee0ed3038c7c0720816df77 *DESCRIPTION
 5f739c8905659ce1acf8cedfd7da5163 *NAMESPACE
-50f4a1e788f070a3b7c60c3c3c84ac06 *R/init.R
+d31fb4a23bb71856f58b4032db2d6ce5 *R/init.R
 e1c5db68e993f51168d6cae068648993 *R/listPorts.R
 1bf02fd935aa69a4b86f8f880b9eda0c *R/pkgname.R
-8390d05fe006f9fcdf5423e54e4a6b63 *R/serial.R
+576bee81a82c38a9fa465c22a6d18121 *R/serial.R
 5755160b2c292f5aa0e46b422a52b2f0 *man/close.serialConnection.Rd
 64c133d772e27e69a3e07f86eef399f5 *man/flush.serialConnection.Rd
 9a628fdbe04459c4ae8fd5e9f1522a6e *man/isOpen.Rd
@@ -12,7 +12,7 @@ e0a126761c2e45e7e5c92600fec36736 *man/isOpen.serialConnection.Rd
 e459337de2c77cb3d3d58f0ad5549266 *man/listPorts.Rd
 cf8950e135701043ab375eeedff3ec91 *man/nBytesInQueue.Rd
 1d631610029a34fb47cf283248eebc36 *man/open.serialConnection.Rd
-6615cfae157a8716311560d2d7490c75 *man/read.serialConnection.Rd
+506199574f09d60e1e3fc40b138d57e2 *man/read.serialConnection.Rd
 35bba1685509d5d7febd23588c393715 *man/serial.Rd
-8c1b15d756c674f3a5a4accbac45a9dd *man/serialConnection.Rd
+e6f6b869ae54e64fc94719d011d3d458 *man/serialConnection.Rd
 289c3f13a7bbb8020d82db4359ef68f5 *man/write.serialConnection.Rd

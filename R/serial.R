@@ -33,7 +33,7 @@ write.serialConnection<-function(con,dat)
   if(is.null(dat))
     return(message('Nothing to do!'))
   
-  if(dat == '' & con$newline == 0)
+  if(all(dat == '') & con$newline == 0)
     return(message('Nothing to do!'))
 
   # Tcl / Tk requires a character representation of the data
@@ -81,7 +81,7 @@ write.serialConnection<-function(con,dat)
 #' Mind: Values form 0x01 -- 0x31 might be displayed as escaped characters like
 #'  "\\001" if they are interpreted as string.
 #' If the end-of-file character specified by \code{eof} is received the reading 
-#' stops. A \code{close(con)} -- \code{open(con)} combination must be done to 
+#' stops. A \code{close(con)} -- \code{open(con)} sequence must be invoked to 
 #' reopen the connection.
 #' If \code{n>0} <n> bytes will be read. In case of less than \code{n} bytes 
 #' available the function returns the buffer without waiting for all \code{n} 
@@ -113,7 +113,7 @@ read.serialConnection <- function(con, n = 0)
     # read operation enables binary mode
     if(con$translation == 'binary')
     {
-      # binary scan [read $sdev_CNCA0] cu* data -- converts bytewise to uint
+      # cu* ... converts bytewise to uint
       
       comStr <- paste('binary scan [read ${sdev_',con$port,'}'
                                    ,ifelse(n > 0,paste(' ',n,sep = ''),'')

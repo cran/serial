@@ -30,10 +30,10 @@ supported; maybe USB schould work too}
   \item{\code{FALSE} or 0}{no newline}
           }}
 
-\item{eof}{\code{<CHAR>}, termination char of the datastream. It only makes sense
-if \code{<translation>} is 'binary' and the stream is a file. Must be in the
-range of 0x01 -- 0x7f. When the conection is closed \code{eof} is send as 
-last and final character}
+\item{eof}{\code{<CHAR>}, termination char of the datastream (end-of-file). It
+only makes sense if \code{<translation>} is 'binary' and the stream is
+a file. Must be in the range of 0x01 -- 0x7f. When the conection is closed
+\code{eof} is send as the last and final character.}
 
 \item{translation}{Determines the end-of-line (eol) character and mode of 
 operation. This could be 'lf', 'cr', 'crlf', 'binary',
@@ -72,14 +72,15 @@ does the job.
 \section{Binary Data}{
  
 
-Reading binary data is possible by setting \code{transaltion = 'binary'}. Pay 
-attention that input and output are strings with a number range of 0...0xFF
-which might require certain conversations e. g. \code{charToRaw()} or
+Handling binary data is possible by setting \code{transaltion = 'binary'}. Pay 
+attention that input and output vectors are characters with a number range of
+0...0xFF which might require certain conversations e. g. \code{charToRaw()} or
 \code{rawToChar()} functions. If \code{eof}-character is defined, this symbol
 terminates the input data stream. Every byte in the buffer after that
 symbol is deleted/ignored. The next transmission is valid again up to that symbol.
 If the connection is closed \code{eof} is send to terminate the output data
-stream.
+stream. Remind, the \code{newline} option works here too. It adds a line feed
+or \code{0x0A} - byte to the end of each output respectively.
 }
 
 \section{ASCII Data}{
