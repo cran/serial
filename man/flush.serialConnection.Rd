@@ -23,4 +23,3 @@ remaining bytes.
 \seealso{
 \code{\link{serial}}
 }
-

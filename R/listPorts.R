@@ -1,7 +1,7 @@
 #' Lists the serial interfaces.
 #' 
 #' This function lists all installed serial interfaces in a computer.
-#' Thereby Windows, Linux and MacOs behave a little bit different. Please ensure
+#' Thereby Windows, Linux and MacOs behave different. Please ensure
 #' that you have the appropriate permissions to do a search in the registry or
 #' in the corresponding linux folders.
 #' 
@@ -19,12 +19,12 @@
 #' 
 #' @section Linux and MacOS:
 #' 
-#' Here the situation is a bit different, compared to Windows. All possible serial 
+#' Here the situation is different, compared to Windows. All possible serial 
 #' devices are located in \code{"/dev/tty[...]"} as a file connection. Still, all
 #' virtual and closed dev's can be found here. This is confusing, because one will 
 #' find more devices in this folder than physically (virtual) present.
-#' In addition to that, on Ubuntu linux systems in "\code{/sys/devices/pnp0/...}"
-#' only the plug and play devices of interest are listed again. That is the reason why, 
+#' In addition to that, Ubuntu linux systems do list the plug and play devices 
+#' of interest in "\code{/sys/devices/pnp0/...}" again. That is the reason why, 
 #' the function returns a subset of \code{"/dev/tty[...]"}, which is also present in the 
 #' \code{"../pnp0/.."} folder.
 #' 

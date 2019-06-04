@@ -40,4 +40,3 @@ characters.
 \seealso{
 \code{\link{serial}}
 }
-

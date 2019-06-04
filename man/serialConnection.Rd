@@ -91,7 +91,7 @@ string, which is send or received, carries valid 8bit ASCII characters
 (0x01 -- 0xFF). Some of these characters appear as escaped sequences, if they
 are not printable.
 A string is terminated by the end-of-line character (e. g. \\n). The 
-transmission ends and so becomes valid if a symbol is detected according to
+transmission ends and so becomes valid if the symbol is detected according to
 the \code{translation} setting. Sending terminated strings invokes the
 substitution of the end-of-line character according to the \code{translation}
 setting.

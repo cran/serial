@@ -38,4 +38,3 @@ must be of type \code{raw} or \code{string}. If \code{dat} is numeric
 \seealso{
 \code{\link{serial}}
 }
-

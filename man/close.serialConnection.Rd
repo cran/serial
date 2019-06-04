@@ -17,4 +17,3 @@ This function closes the corresponding connection.
 \seealso{
 \code{\link{serialConnection}}
 }
-

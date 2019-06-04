@@ -21,4 +21,3 @@ Reads out the number of characters / bytes pending in the input and output buffe
 \seealso{
 \code{\link{serial}}
 }
-

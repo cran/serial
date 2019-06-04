@@ -17,4 +17,3 @@ Default function from base-package
 \seealso{
 \code{\link[base]{isOpen}}
 }
-

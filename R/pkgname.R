@@ -1,8 +1,8 @@
 #' A serial communication interface for R.
 #' 
 #' @description
-#' This R package provides the functionality to use the serial communication ports
-#' "COM" or "tty" to use the RS232/RS422/RS485 functionality of the corresponding 
+#' This R package provides the functionality of serial communication ports
+#' "COM" or "tty" to use the RS232/RS422/RS485 capabilities of the corresponding 
 #' hardware. Also virtual COM-ports via USB do work, as long as they are mapped
 #' to COM[n] (win) or tty[n] (Linux) in the operating system.
 #' 
@@ -86,12 +86,11 @@
 #' close(con)
 #' 
 #' }
-#' @concept RS232 serial
-#' @concept RS485 serial
-#' @concept RS422 serial
-#' @concept USB serial
-#' @concept binary communication 
-#' 
+#' @concept RS232
+#' @concept RS485
+#' @concept RS422
+#' @concept USB
+#' @concept serial communication
 #' @docType package
 #' @name serial
 NULL

@@ -14,4 +14,3 @@ isOpen(con, ...)
 \description{
 Generic function for isOpen
 }
-

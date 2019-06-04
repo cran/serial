@@ -17,4 +17,3 @@ This function initializes the serial interface and opens it for later usage.
 \seealso{
 \code{\link{serialConnection}}
 }
-

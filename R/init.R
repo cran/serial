@@ -33,7 +33,7 @@
 #' (0x01 -- 0xFF). Some of these characters appear as escaped sequences, if they
 #' are not printable.
 #' A string is terminated by the end-of-line character (e. g. \\n). The 
-#' transmission ends and so becomes valid if a symbol is detected according to
+#' transmission ends and so becomes valid if the symbol is detected according to
 #' the \code{translation} setting. Sending terminated strings invokes the
 #' substitution of the end-of-line character according to the \code{translation}
 #' setting.
@@ -76,6 +76,7 @@
 #' @param buffersize defines the system buffersize. The default value is 4096 
 #'                   bytes (4kB).
 #' @return An object of the class '\code{serialConnection}' is returned
+#' 
 #' @export
 serialConnection<-function(name, port='com1', mode='115200,n,8,1', buffering='none', newline=0,eof='',translation='auto',handshake='none',buffersize = 4096)
 {

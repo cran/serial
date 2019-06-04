@@ -17,4 +17,3 @@ returns \code{{F, T}} for 'not open' and 'is open'
 \description{
 Tests whether the connection is open or not
 }
-
