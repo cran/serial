@@ -39,8 +39,13 @@ of interest in "\code{/sys/devices/pnp0/...}" again. That is the reason why,
 the function returns a subset of \code{"/dev/tty[...]"}, which is also present in the 
 \code{"../pnp0/.."} folder.
 
-On MacOs the installed interfaces are marked by "\code{tty.<name>}", with a unique 
+On MacOs the installed interfaces are marked by "\code{tty.<name>}" or "\code{cu.<name>}", with a unique 
 name after the dot, which makes it easier to search for installed devices.
+Here a \code{tty} device is a modem which waits for a DCD (Data Carrier Detect)
+signal to receive data. The device is blocked as long such a signal is 
+not detected. The corresponding \code{cu} device manages the out going communication
+for historical reasons. However a \code{cu} port is not blocked and should be used
+in favour on MacOS.
 
 Subsequently, the user must know which interface is present and which isn't. AND the user
 must have at least reading permissions in the corresponding folders. So in the end,

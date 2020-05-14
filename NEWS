@@ -1,0 +1,28 @@
+serial 3.0
+====================
+
+* bug fix with connection names on MacOS
+* introduce print()- and summary()-function
+* if read() produces a zero length object it now returns empty string '' in ASCII mode and NA in binary mode
+
+serial 2.1
+====================
+
+* bug fix with connection names on Linux
+
+
+serial 2.0
+====================
+
+* enable binary mode
+* introduce flush()-function
+* introduce nBytes()-function
+
+serial 1.0
+====================
+
+* initial release
+* ASCII-based communication
+
+
+

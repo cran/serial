@@ -3,7 +3,6 @@
 \docType{package}
 \name{serial}
 \alias{serial}
-\alias{serial-package}
 \title{A serial communication interface for R.}
 \description{
 This R package provides the functionality of serial communication ports
@@ -57,6 +56,9 @@ write.serialConnection(con,"Hello World!")
 
 # read, in case something came in
 read.serialConnection(con)
+
+# show summary
+summary(con)
 
 # close the connection
 close(con)

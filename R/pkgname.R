@@ -53,6 +53,9 @@
 #' # read, in case something came in
 #' read.serialConnection(con)
 #' 
+#' # show summary
+#' summary(con)
+#' 
 #' # close the connection
 #' close(con)
 #' 
